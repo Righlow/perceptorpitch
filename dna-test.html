@@ -1,0 +1,182 @@
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DNA Test</title>
+
+<style>
+
+body{
+margin:0;
+background:#050505;
+overflow:hidden;
+}
+
+canvas{
+display:block;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<script>
+
+let scene = new THREE.Scene();
+
+let camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
+
+camera.position.z = 20;
+
+let renderer = new THREE.WebGLRenderer({antialias:true});
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
+let dna = new THREE.Group();
+
+scene.add(dna);
+
+const nodesA=[];
+const nodesB=[];
+const links=[];
+
+const count = 50;
+const radius = 4;
+const height = 26;
+const twist = .45;
+
+const sphere = new THREE.SphereGeometry(.25,16,16);
+
+const matA = new THREE.MeshBasicMaterial({color:0x2ce2e8});
+const matB = new THREE.MeshBasicMaterial({color:0xc04226});
+
+const linkMat = new THREE.LineBasicMaterial({
+color:0xffffff,
+transparent:true,
+opacity:.25
+});
+
+for(let i=0;i<count;i++){
+
+let y = (i/count)*height - height/2;
+
+let angle = i*twist;
+
+let x1 = Math.cos(angle)*radius;
+let z1 = Math.sin(angle)*radius;
+
+let x2 = Math.cos(angle+Math.PI)*radius;
+let z2 = Math.sin(angle+Math.PI)*radius;
+
+let nodeA = new THREE.Mesh(sphere,matA);
+nodeA.position.set(x1,y,z1);
+
+let nodeB = new THREE.Mesh(sphere,matB);
+nodeB.position.set(x2,y,z2);
+
+dna.add(nodeA);
+dna.add(nodeB);
+
+nodesA.push(nodeA);
+nodesB.push(nodeB);
+
+let geo = new THREE.BufferGeometry().setFromPoints([
+nodeA.position.clone(),
+nodeB.position.clone()
+]);
+
+let line = new THREE.Line(geo,linkMat);
+
+dna.add(line);
+
+links.push({line,a:nodeA,b:nodeB});
+
+}
+
+function updateDNA(time){
+
+nodesA.forEach((node,i)=>{
+
+let angle = i*twist + time*.8;
+
+let wave = Math.sin(time*1.5+i*.3)*.35;
+
+let r = radius + wave;
+
+node.position.x = Math.cos(angle)*r;
+node.position.z = Math.sin(angle)*r;
+
+});
+
+nodesB.forEach((node,i)=>{
+
+let angle = i*twist + Math.PI + time*.8;
+
+let wave = Math.sin(time*1.5+i*.3)*.35;
+
+let r = radius + wave;
+
+node.position.x = Math.cos(angle)*r;
+node.position.z = Math.sin(angle)*r;
+
+});
+
+links.forEach(l=>{
+
+let pos = l.line.geometry.attributes.position;
+
+pos.setXYZ(0,l.a.position.x,l.a.position.y,l.a.position.z);
+
+pos.setXYZ(1,l.b.position.x,l.b.position.y,l.b.position.z);
+
+pos.needsUpdate=true;
+
+});
+
+}
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+let time = performance.now()*0.001;
+
+updateDNA(time);
+
+dna.rotation.y += .003;
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+window.addEventListener("resize",()=>{
+
+camera.aspect = window.innerWidth/window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+});
+
+</script>
+
+</body>
+</html>
+```
+    

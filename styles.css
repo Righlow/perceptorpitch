@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
+
+:root {
+  --mango: #FF8C00;
+  --mango-light: #FFB347;
+  --mango-glow: rgba(255,140,0,0.15);
+  --moon: #0A0A12;
+  --moon-mid: #12121E;
+  --moon-surface: #1A1A2E;
+  --moon-card: #1E1E32;
+  --accent-teal: #00D4C8;
+  --accent-teal-dim: rgba(0,212,200,0.12);
+  --text-primary: #F0EEE8;
+  --text-muted: rgba(240,238,232,0.55);
+}
+.process-section {
+  padding: 120px 40px;
+  text-align: center;
+}
+
+.process-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 60px;
+}
+
+.process-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.process-step {
+  background: var(--moon-card);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px 24px;
+  border-radius: 16px;
+  width: 140px;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  opacity: 0.4;
+  transform: scale(0.9);
+}
+
+.process-step span {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.process-step p {
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.process-step.active {
+  opacity: 1;
+  transform: scale(1);
+  border: 1px solid var(--mango);
+  box-shadow: 0 0 25px var(--mango-glow);
+}
+
+.process-step.active span {
+  color: var(--mango);
+}
+
+.process-step.golden.active {
+  border: 1px solid var(--accent-teal);
+  box-shadow: 0 0 25px rgba(0,212,200,0.2);
+}
+
+.arrow {
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+}
+
+.arrow::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: -4px;
+  border-left: 6px solid rgba(255,255,255,0.1);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
